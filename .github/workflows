@@ -1,0 +1,25 @@
+name: Enforce Branch Rules
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  enforce-branch-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Branch Name Pattern
+        run: |
+          # Extract the branch name from the GITHUB_REF environment variable
+          BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
+          
+          # Define your branch name pattern (modify as needed)
+          BRANCH_PATTERN='feat/.*'
+
+          # Check if the branch name matches the pattern
+          if [[ ! "$BRANCH_NAME" =~ ^$BRANCH_PATTERN$ ]]; then
+            echo "error: Invalid branch name. Branch names must match the pattern: $BRANCH_PATTERN"
+            exit 1
+          fi
+        shell: bash

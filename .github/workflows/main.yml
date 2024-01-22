@@ -1,0 +1,19 @@
+name: Branch Name Check
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  branch-name-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Branch Name
+        run: |
+          branch_name=$(echo "${GITHUB_REF#refs/heads/}")
+          if [[ ! $branch_name =~ ^feature/.*$ ]]; then
+            echo "Error: Branch name does not match the required pattern: feature/*"
+            exit 1
+          fi

@@ -1,7 +1,7 @@
 name: Enforce Branch Naming
 
 on:
-  push:
+  create:
     branches:
       - '*'
 
@@ -12,11 +12,10 @@ jobs:
     steps:
       - name: Check Branch Naming
         run: |
-          pattern="^refs/heads/feature/.*$"
-          while read -r ref; do
-            branch=$(echo "$ref" | awk -F'/' '{print $4}')
-            if [[ ! "$ref" =~ $pattern ]]; then
-              echo "Error: Branch name '$branch' does not match the required pattern: feature/.*"
-              exit 1
-            fi
-          done <<< "$(git log --format='%D' -n 1)"
+          branch_name=${GITHUB_REF#refs/heads/}
+          pattern="^feature/.*$"
+          
+          if [[ ! "$branch_name" =~ $pattern ]]; then
+            echo "Error: Branch name '$branch_name' does not match the required pattern: feature/.*"
+            exit 1
+          fi

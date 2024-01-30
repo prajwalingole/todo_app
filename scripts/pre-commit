@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Get the current branch name
+branch_name=$(git symbolic-ref --short HEAD)
+
+# Define the desired pattern
+pattern="^feature/[a-z]+(_[a-z0-9]+)*(_[a-z]+)?(_[a-z0-9]+(\.[0-9]+)?)?$"
+
+# Define allowed branches
+allowed_branches=("master" "main" "dev" "stage" "hotfix")
+
+# Check if the branch name is allowed
+if [[ " ${allowed_branches[@]} " =~ " $branch_name " ]]; then
+    exit 0
+fi
+
+# Check if the branch name matches the pattern
+if [[ ! $branch_name =~ $pattern ]]; then
+    echo "Error: Branch name '$branch_name' does not match the required pattern: feature/.*"
+    exit 1
+fi
+
+# Check if the branch name length is within the desired range (10 to 58)
+branch_length=${#branch_name}
+if ((branch_length < 10 || branch_length > 58)); then
+    echo "Error: Branch name '$branch_name' length should be between 10 and 58 characters."
+    exit 1
+fi

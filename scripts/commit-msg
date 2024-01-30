@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Minimum and maximum allowed lengths for the commit message
+min_length=20
+max_length=500
+
+# Read the commit message from the temporary file
+commit_message_file=$1
+commit_message=$(cat "$commit_message_file")
+
+# Get the length of the commit message
+length=${#commit_message}
+
+# Check the length of the commit message
+if [ "$length" -lt "$min_length" ]; then
+    echo "Error: Commit message is too short (minimum $min_length characters)." >&2
+    exit 1
+elif [ "$length" -gt "$max_length" ]; then
+    echo "Error: Commit message is too long (maximum $max_length characters)." >&2
+    exit 1
+fi

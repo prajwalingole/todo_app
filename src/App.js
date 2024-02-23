@@ -1,6 +1,6 @@
 import React from 'react'
 import TodoWrapper from './components/TodoWrapper';
-// checkings
+// checkin
 const App = () => {
   return (
     <div>
